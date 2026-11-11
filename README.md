@@ -7,8 +7,9 @@ CandidateSync helps HR teams manage candidate applications and enables candidate
 ## Live Application
 
 - **Frontend:** [https://candidate-sync.vercel.app](https://candidate-sync.vercel.app)
-- **Backend API:** [https://candidate-sync-api.onrender.com](https://candidate-sync-api.onrender.com)
 - **Backend health check:** [https://candidate-sync-api.onrender.com/api/health](https://candidate-sync-api.onrender.com/api/health)
+
+The backend is an API service; its root URL is not a webpage. Use the health-check endpoint above to verify that the API is available.
 
 ## Features
 
