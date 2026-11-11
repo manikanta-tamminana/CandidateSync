@@ -1,9 +1,14 @@
-
 # CandidateSync
 
 **A real-time recruitment application tracking platform.**
 
 CandidateSync helps HR teams manage candidate applications and enables candidates to track their recruitment progress through a centralized dashboard.
+
+## Live Application
+
+- **Frontend:** [https://candidate-sync.vercel.app](https://candidate-sync.vercel.app)
+- **Backend API:** [https://candidate-sync-api.onrender.com](https://candidate-sync-api.onrender.com)
+- **Backend health check:** [https://candidate-sync-api.onrender.com/api/health](https://candidate-sync-api.onrender.com/api/health)
 
 ## Features
 
@@ -186,6 +191,8 @@ Base URL: `/api`
 |---|---|---|
 | GET | `/health` | Check API availability |
 
+The health endpoint is available at `/api/health` on the deployed backend.
+
 All protected endpoints require a valid JWT bearer token.
 
 ## Real-Time Updates
@@ -207,17 +214,17 @@ CandidateSync uses Socket.IO for real-time application updates.
 
 ## Production Deployment
 
-The application can be deployed using:
+The application is deployed using:
 
-- Frontend: Vercel
-- Backend: Render
-- Database: MongoDB Atlas
+- **Frontend:** [Vercel](https://vercel.com/)
+- **Backend:** [Render](https://render.com/)
+- **Database:** MongoDB Atlas
 
-Configure the production environment variables using the deployed frontend and backend URLs.
+Production environment variables connect the deployed frontend and backend. Keep credentials and secrets private; never commit environment files containing real values.
 
 ## Author
 
 **Manikanta Tamminana**
 
-B.Tech Computer Science and Engineering
+B.Tech Computer Science and Engineering  
 National Institute of Technology Agartala
