@@ -1,73 +1,63 @@
+
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 
 let io;
 
 const initializeSocket = (httpServer) => {
-    io = new Server(httpServer, {
-        cors: {
-            origin: process.env.CLIENT_URL || "http://localhost:5173",
-            methods: ["GET", "POST"]
-        }
-    });
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is missing");
+  }
 
-    // Authenticate every socket connection
-    io.use((socket, next) => {
-        try {
-            const token = socket.handshake.auth.token;
+  io = new Server(httpServer, {
+    cors: {
+      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      methods: ["GET", "POST"],
+    },
+  });
 
-            if (!token) {
-                return next(new Error("Authentication required"));
-            }
+  io.use((socket, next) => {
+    try {
+      const token = socket.handshake.auth.token;
 
-            const decoded = jwt.verify(
-                token,
-                process.env.JWT_SECRET
-            );
+      if (!token) {
+        return next(new Error("Authentication required"));
+      }
 
-            socket.user = decoded;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      socket.user = decoded;
 
-            next();
+      next();
+    } catch (error) {
+      next(new Error("Invalid or expired token"));
+    }
+  });
 
-        } catch (error) {
-            next(new Error("Invalid or expired token"));
-        }
-    });
-
-    io.on("connection", (socket) => {
+  io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.user.id}`);
-    console.log(`User role: ${socket.user.role}`);
 
     if (socket.user.role === "candidate") {
-        const room = `candidate:${socket.user.id}`;
-
-        socket.join(room);
-
-        console.log(`Candidate joined room: ${room}`);
+      socket.join(`candidate:${socket.user.id}`);
     }
 
     if (socket.user.role === "admin") {
-        socket.join("admins");
-        console.log("Admin joined admin room");
+      socket.join("admins");
     }
 
     socket.on("disconnect", () => {
-        console.log(`Socket disconnected: ${socket.user.id}`);
+      console.log(`Socket disconnected: ${socket.user.id}`);
     });
-});
+  });
 
-    return io;
+  return io;
 };
 
 const getIO = () => {
-    if (!io) {
-        throw new Error("Socket.IO has not been initialized");
-    }
+  if (!io) {
+    throw new Error("Socket.IO has not been initialized");
+  }
 
-    return io;
+  return io;
 };
 
-module.exports = {
-    initializeSocket,
-    getIO
-};
+module.exports = { initializeSocket, getIO };

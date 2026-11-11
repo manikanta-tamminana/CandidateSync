@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -13,7 +12,11 @@ const { initializeSocket } = require("./config/socket");
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+  }),
+);
 app.use(express.json());
 
 // Routes
@@ -22,34 +25,33 @@ app.use("/api/auth", authRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "CandidateSync API is running"
-    });
+  res.status(200).json({
+    success: true,
+    message: "CandidateSync API is running",
+  });
 });
 
 const PORT = process.env.PORT || 5001;
 
 const startServer = async () => {
-    try {
-        await connectDB();
+  try {
+    await connectDB();
 
-        // Create one HTTP server
-        const httpServer = http.createServer(app);
+    // Create one HTTP server
+    const httpServer = http.createServer(app);
 
-        // Attach Socket.IO
-        initializeSocket(httpServer);
+    // Attach Socket.IO
+    initializeSocket(httpServer);
 
-        // Start listening
-        httpServer.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-            console.log("Socket.IO initialized successfully");
-        });
-
-    } catch (error) {
-        console.error("Server startup failed:", error.message);
-        process.exit(1);
-    }
+    // Start listening
+    httpServer.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log("Socket.IO initialized successfully");
+    });
+  } catch (error) {
+    console.error("Server startup failed:", error.message);
+    process.exit(1);
+  }
 };
 
 startServer();
