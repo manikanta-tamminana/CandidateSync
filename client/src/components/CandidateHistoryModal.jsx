@@ -1,15 +1,23 @@
 
 import { useEffect, useState } from "react";
+import { X, History } from "lucide-react";
+
 import { getCandidateHistory } from "../services/api";
 import { useAuth } from "../context/useAuth";
 
+const STATUS_CLASS = {
+  Applied: "applied",
+  "Under Review": "under-review",
+  Shortlisted: "shortlisted",
+  "Interview Scheduled": "interview",
+  Selected: "selected",
+  Rejected: "rejected"
+};
+
 function formatDate(date) {
   return new Date(date).toLocaleString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
+    day: "numeric", month: "short", year: "numeric",
+    hour: "numeric", minute: "2-digit"
   });
 }
 
@@ -34,10 +42,7 @@ const CandidateHistoryModal = ({ candidate, onClose }) => {
     };
 
     fetchHistory();
-
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [token, candidate._id]);
 
   useEffect(() => {
@@ -55,55 +60,30 @@ const CandidateHistoryModal = ({ candidate, onClose }) => {
   }, [onClose]);
 
   return (
-    <div
-      className="modal-backdrop"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        className="history-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="history-modal-title"
-      >
+    <div className="modal-backdrop" onMouseDown={(event) => {
+      if (event.target === event.currentTarget) onClose();
+    }}>
+      <section className="history-modal" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
         <header className="history-modal-header">
           <div>
             <span className="modal-eyebrow">CANDIDATE ACTIVITY</span>
-            <h2 id="history-modal-title">Status history</h2>
+            <h2 id="history-modal-title">Application history</h2>
             <p>{candidate.name} · {candidate.email}</p>
           </div>
-          <button
-            className="modal-close"
-            onClick={onClose}
-            aria-label="Close history"
-          >
-            ×
+          <button className="modal-close" onClick={onClose} aria-label="Close history">
+            <X size={18} />
           </button>
         </header>
 
         <div className="history-modal-content">
-          {loading && (
-            <div className="dashboard-state">
-              <div className="loading-spinner" />
-              <p>Loading status history...</p>
-            </div>
-          )}
-
-          {!loading && error && (
-            <div className="dashboard-state error-state">
-              <p>{error}</p>
-            </div>
-          )}
-
+          {loading && <div className="dashboard-state"><div className="loading-spinner" /><p>Loading status history...</p></div>}
+          {!loading && error && <div className="dashboard-state error-state"><p>{error}</p></div>}
           {!loading && !error && history.length === 0 && (
             <div className="dashboard-state">
-              <div className="empty-icon">↗</div>
-              <h3>No status updates yet</h3>
+              <History size={30} /><h3>No status updates yet</h3>
               <p>Updates to this application will appear here.</p>
             </div>
           )}
-
           {!loading && !error && history.length > 0 && (
             <div className="history-timeline">
               {history.map((item) => (
@@ -111,21 +91,14 @@ const CandidateHistoryModal = ({ candidate, onClose }) => {
                   <div className="timeline-marker" />
                   <div className="timeline-entry">
                     <div className="timeline-entry-top">
-                      <strong>{item.newStatus}</strong>
+                      <span className={`status-badge ${STATUS_CLASS[item.newStatus] || ""}`}>
+                        <span className="status-dot" />{item.newStatus}
+                      </span>
                       <time>{formatDate(item.createdAt)}</time>
                     </div>
-
-                    <p className="timeline-transition">
-                      {item.previousStatus} <span>→</span> {item.newStatus}
-                    </p>
-
-                    <div className="timeline-remarks">
-                      {item.remarks || "No remarks provided."}
-                    </div>
-
-                    <p className="timeline-author">
-                      Updated by {item.updatedBy?.name || "Unknown"}
-                    </p>
+                    <p className="timeline-transition">{item.previousStatus}<span>→</span>{item.newStatus}</p>
+                    <div className="timeline-remarks">{item.remarks || "No remarks provided."}</div>
+                    <p className="timeline-author">Updated by {item.updatedBy?.name || "Unknown"}</p>
                   </div>
                 </article>
               ))}
@@ -134,9 +107,7 @@ const CandidateHistoryModal = ({ candidate, onClose }) => {
         </div>
 
         <footer className="history-modal-footer">
-          <button className="secondary-button" onClick={onClose}>
-            Close
-          </button>
+          <button className="secondary-button" onClick={onClose}>Close</button>
         </footer>
       </section>
     </div>

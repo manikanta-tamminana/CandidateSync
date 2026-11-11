@@ -4,6 +4,15 @@ const jwt = require("jsonwebtoken");
 
 let io;
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://localhost:5177",
+  "http://localhost:5178",
+  "http://localhost:5179",
+  "http://localhost:5180",
+].filter(Boolean);
+
 const initializeSocket = (httpServer) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is missing");
@@ -11,7 +20,7 @@ const initializeSocket = (httpServer) => {
 
   io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      origin: allowedOrigins,
       methods: ["GET", "POST"],
     },
   });
@@ -24,9 +33,7 @@ const initializeSocket = (httpServer) => {
         return next(new Error("Authentication required"));
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      socket.user = decoded;
-
+      socket.user = jwt.verify(token, process.env.JWT_SECRET);
       next();
     } catch (error) {
       next(new Error("Invalid or expired token"));
