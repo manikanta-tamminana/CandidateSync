@@ -47,7 +47,8 @@ The backend is an API service. Its root URL is not a webpage; use the health-che
 - Registration collects the candidate's name, email, password and applied job role.
 - Public registration always creates a candidate account; it does not provide an administrator registration option.
 - A successfully registered candidate is signed in and enters the Candidate Portal with the initial application status **Applied**.
-- Administrator accounts are provisioned separately through the backend admin-seeding process.
+- Administrator accounts are provisioned separately through the backend admin-seeding process; public registration never grants the admin role.
+- The admin-seeding script supports multiple administrator accounts by email. Use a different email for each administrator; re-running it with the same admin email updates that specific account.
 - Demo administrator and candidate credentials should be shared privately with evaluators rather than published in this public repository.
 
 ## 2. Technology Stack
@@ -361,12 +362,14 @@ ADMIN_PASSWORD=your_strong_admin_password
 
 Use your own values. Never commit real secrets.
 
-Seed the admin account and start the backend:
+Seed the administrator account configured in `.env` and start the backend:
 
 ```bash
 npm run seed:admin
 npm run dev
 ```
+
+To provision another administrator, update `ADMIN_NAME`, `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local, uncommitted `.env` file with the new administrator's details, then run `npm run seed:admin` again. Use a unique email address and a password of at least 12 characters. The script creates a separate admin account; it does not overwrite a different administrator. Re-running it with an existing admin email updates only that account. If the email belongs to a candidate account, the script stops with an error. Keep all real credentials out of Git.
 
 The backend runs locally at `http://localhost:5001`. Its health endpoint is `http://localhost:5001/api/health`.
 
