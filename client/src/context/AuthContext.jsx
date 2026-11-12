@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import AuthContext from "./authContextBase";
 import { loginUser, registerCandidate } from "../services/api";
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
   };
-  const updateUserStatus = (newStatus) => {
+  const updateUserStatus = useCallback((newStatus) => {
     setUser((currentUser) => {
       if (!currentUser) return currentUser;
 
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
       return updatedUser;
     });
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
