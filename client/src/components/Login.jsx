@@ -68,14 +68,16 @@ function Login() {
         <div className="login-form-wrapper">
           <div className="login-form-heading">
             <span className="login-form-eyebrow">
-              {isRegistering ? "JOIN CANDIDATESYNC" : "WELCOME BACK"}
+              {isRegistering ? "Join CandidateSync" : "Welcome back"}
             </span>
 
-            <h1>{isRegistering ? "Create your account" : "Welcome back"}</h1>
+            <h1>
+              {isRegistering ? "Create a new account" : "Sign in to your account"}
+            </h1>
 
             <p>
               {isRegistering
-                ? "Create your candidate account to track your recruitment journey."
+                ? "Set up your profile and follow every step of your recruitment journey."
                 : "Enter your email and password to access your account."}
             </p>
           </div>
@@ -173,24 +175,21 @@ function Login() {
                   ? "Creating account..."
                   : "Signing in..."
                 : isRegistering
-                  ? "Create account"
+                  ? "Sign up"
                   : "Sign in"}
-
-              {!loading && <span>→</span>}
             </button>
           </form>
 
-          <div className="login-mode-switch">
-            {isRegistering ? "Already have an account?" : "New candidate?"}
-
+          <p className="login-mode-switch">
+            {isRegistering ? "Already have an account?" : "New to CandidateSync?"}
             <button
               type="button"
               className="login-mode-link"
               onClick={() => switchMode(isRegistering ? "login" : "register")}
             >
-              {isRegistering ? "Sign in" : "Create an account"}
+              {isRegistering ? "Sign in" : "Create a new account"}
             </button>
-          </div>
+          </p>
 
           <div className="login-security-note">
             <span aria-hidden="true">◇</span>
