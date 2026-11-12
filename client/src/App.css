@@ -840,8 +840,8 @@
 }
 .progress-completed .progress-step-marker {
   color: #fff;
-  background: #27a56e;
-  border-color: #27a56e;
+  background: var(--brand);
+  border-color: var(--brand);
 }
 .progress-active .progress-step-marker {
   color: var(--brand);
