@@ -125,13 +125,6 @@ const CandidateHistory = () => {
           <div><h2>Recruitment journey</h2><p>Track the stages of your application.</p></div>
         </div>
         <div className="progress-steps" aria-label="Application progress">
-          <div className="progress-track" aria-hidden="true">
-            <span
-              style={{
-                width: `${(currentIndex / (STATUS_ORDER.length - 1)) * 100}%`,
-              }}
-            />
-          </div>
           {STATUS_ORDER.map((step, index) => {
             const completed = isRejected
               ? currentIndex >= index
@@ -146,6 +139,13 @@ const CandidateHistory = () => {
                 <div className="progress-step-marker">
                   {completed ? <CheckCircle2 size={18} /> : <span>{index + 1}</span>}
                 </div>
+                {index < STATUS_ORDER.length - 1 && (
+                  <span className="progress-connector" aria-hidden="true">
+                    <span
+                      className={`progress-connector-fill ${index < currentIndex ? "progress-connector-filled" : ""}`}
+                    />
+                  </span>
+                )}
                 <span>{step}</span>
               </div>
             );
