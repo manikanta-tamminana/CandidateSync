@@ -1046,10 +1046,11 @@
   margin-bottom: 31px;
 }
 .login-form-eyebrow {
+  display: block;
   color: var(--brand);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 .login-form-heading h1 {
   margin: 12px 0 9px;
@@ -1143,6 +1144,40 @@
   font-size: 11px;
   line-height: 1.5;
 }
+.login-mode-switch {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 17px 0 0;
+  color: #777d8e;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.login-mode-link {
+  padding: 0;
+  border: 0;
+  color: var(--brand);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.login-mode-link:hover {
+  color: var(--brand-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.login-mode-link:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .login-security-note {
   display: flex;
   align-items: center;
