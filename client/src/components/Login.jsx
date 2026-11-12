@@ -1,30 +1,59 @@
-
 import { useState } from "react";
 import { useAuth } from "../context/useAuth";
 import BrandLogo from "./BrandLogo";
 
 function Login() {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
+
+  const [mode, setMode] = useState("login");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [jobRole, setJobRole] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const isRegistering = mode === "register";
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (loading) return;
 
     setError("");
+
+    if (isRegistering && password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await login(email.trim().toLowerCase(), password);
+      if (isRegistering) {
+        await register({
+          name,
+          email,
+          password,
+          jobRole,
+        });
+      } else {
+        await login(email.trim().toLowerCase(), password);
+      }
     } catch (err) {
-      setError(err.message || "Unable to sign in. Please try again.");
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode);
+    setError("");
+    setPassword("");
+    setShowPassword(false);
   };
 
   const stages = ["Applied", "Review", "Interview", "Decision"];
@@ -38,19 +67,46 @@ function Login() {
 
         <div className="login-form-wrapper">
           <div className="login-form-heading">
-            <span className="login-form-eyebrow">WELCOME BACK</span>
-            <h1>Welcome back</h1>
-            <p>Enter your email and password to access your account.</p>
+            <span className="login-form-eyebrow">
+              {isRegistering ? "JOIN CANDIDATESYNC" : "WELCOME BACK"}
+            </span>
+
+            <h1>
+              {isRegistering ? "Create your account" : "Welcome back"}
+            </h1>
+
+            <p>
+              {isRegistering
+                ? "Create your candidate account to track your recruitment journey."
+                : "Enter your email and password to access your account."}
+            </p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
+            {isRegistering && (
+              <div className="login-field">
+                <label htmlFor="register-name">Full name</label>
+                <input
+                  id="register-name"
+                  className="login-input"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  autoComplete="name"
+                  maxLength={100}
+                  required
+                />
+              </div>
+            )}
+
             <div className="login-field">
               <label htmlFor="login-email">Email address</label>
               <input
                 id="login-email"
                 className="login-input"
                 type="email"
-                placeholder="name@company.com"
+                placeholder="name@example.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 autoComplete="username"
@@ -58,19 +114,44 @@ function Login() {
               />
             </div>
 
+            {isRegistering && (
+              <div className="login-field">
+                <label htmlFor="register-job-role">Applied job role</label>
+                <input
+                  id="register-job-role"
+                  className="login-input"
+                  type="text"
+                  placeholder="e.g. Software Developer"
+                  value={jobRole}
+                  onChange={(event) => setJobRole(event.target.value)}
+                  maxLength={100}
+                  required
+                />
+              </div>
+            )}
+
             <div className="login-field">
               <label htmlFor="login-password">Password</label>
+
               <div className="login-password-wrap">
                 <input
                   id="login-password"
                   className="login-input"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={
+                    isRegistering
+                      ? "Create a password (minimum 8 characters)"
+                      : "Enter your password"
+                  }
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  autoComplete="current-password"
+                  autoComplete={
+                    isRegistering ? "new-password" : "current-password"
+                  }
+                  minLength={isRegistering ? 8 : undefined}
                   required
                 />
+
                 <button
                   className="password-toggle"
                   type="button"
@@ -93,10 +174,31 @@ function Login() {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading
+                ? isRegistering
+                  ? "Creating account..."
+                  : "Signing in..."
+                : isRegistering
+                  ? "Create account"
+                  : "Sign in"}
+
               {!loading && <span>→</span>}
             </button>
           </form>
+
+          <div className="login-mode-switch">
+            {isRegistering
+              ? "Already have an account?"
+              : "New candidate?"}
+
+            <button
+              type="button"
+              className="login-mode-link"
+              onClick={() => switchMode(isRegistering ? "login" : "register")}
+            >
+              {isRegistering ? "Sign in" : "Create an account"}
+            </button>
+          </div>
 
           <div className="login-security-note">
             <span aria-hidden="true">◇</span>
@@ -139,13 +241,13 @@ function Login() {
             <div className="preview-stages">
               {stages.map((stage, index) => (
                 <div
-                  className={`preview-stage ${
+                  className={\`preview-stage \${
                     index < 2
                       ? "completed"
                       : index === 2
-                      ? "active"
-                      : "upcoming"
-                  }`}
+                        ? "active"
+                        : "upcoming"
+                  }\`}
                   key={stage}
                 >
                   <span>{index < 2 ? "✓" : index + 1}</span>
