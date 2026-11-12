@@ -71,9 +71,7 @@ function Login() {
               {isRegistering ? "JOIN CANDIDATESYNC" : "WELCOME BACK"}
             </span>
 
-            <h1>
-              {isRegistering ? "Create your account" : "Welcome back"}
-            </h1>
+            <h1>{isRegistering ? "Create your account" : "Welcome back"}</h1>
 
             <p>
               {isRegistering
@@ -169,11 +167,7 @@ function Login() {
               </div>
             )}
 
-            <button
-              className="login-submit"
-              type="submit"
-              disabled={loading}
-            >
+            <button className="login-submit" type="submit" disabled={loading}>
               {loading
                 ? isRegistering
                   ? "Creating account..."
@@ -187,9 +181,7 @@ function Login() {
           </form>
 
           <div className="login-mode-switch">
-            {isRegistering
-              ? "Already have an account?"
-              : "New candidate?"}
+            {isRegistering ? "Already have an account?" : "New candidate?"}
 
             <button
               type="button"
@@ -225,8 +217,8 @@ function Login() {
           </h2>
 
           <p>
-            Keep candidates informed and give hiring teams a clearer view
-            of every application, every update and every next step.
+            Keep candidates informed and give hiring teams a clearer view of
+            every application, every update and every next step.
           </p>
 
           <div className="login-preview">
@@ -241,13 +233,13 @@ function Login() {
             <div className="preview-stages">
               {stages.map((stage, index) => (
                 <div
-                  className={\`preview-stage \${
+                  className={`preview-stage ${
                     index < 2
                       ? "completed"
                       : index === 2
                         ? "active"
                         : "upcoming"
-                  }\`}
+                  }`}
                   key={stage}
                 >
                   <span>{index < 2 ? "✓" : index + 1}</span>
