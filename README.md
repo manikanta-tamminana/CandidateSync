@@ -25,7 +25,7 @@ The backend is an API service. Its root URL is not a webpage; use the health-che
 
 ### Candidate
 
-- Secure candidate registration and authentication.
+- Candidate self-registration and secure authentication from the login screen.
 - View personal application status.
 - Track recruitment progress.
 - View application status history.
@@ -39,6 +39,16 @@ The backend is an API service. Its root URL is not a webpage; use the health-che
 4. Interview Scheduled
 5. Selected
 6. Rejected
+
+
+## Candidate Registration and Demo Access
+
+- New candidates can select **Create an account** from the login screen.
+- Registration collects the candidate's name, email, password and applied job role.
+- Public registration always creates a candidate account; it does not provide an administrator registration option.
+- A successfully registered candidate is signed in and enters the Candidate Portal with the initial application status **Applied**.
+- Administrator accounts are provisioned separately through the backend admin-seeding process.
+- Demo administrator and candidate credentials should be shared privately with evaluators rather than published in this public repository.
 
 ## 2. Technology Stack
 
