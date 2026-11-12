@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AuthContext from "./authContextBase";
-import { loginUser } from "../services/api";
+import { loginUser, registerCandidate } from "../services/api";
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -12,6 +12,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const data = await loginUser(email, password);
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    setToken(data.token);
+    setUser(data.user);
+
+    return data.user;
+  };
+
+  const register = async (candidateDetails) => {
+    const data = await registerCandidate(candidateDetails);
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -50,6 +62,7 @@ export const AuthProvider = ({ children }) => {
         token,
         user,
         login,
+        register,
         logout,
         updateUserStatus,
         isAuthenticated: Boolean(token && user),
