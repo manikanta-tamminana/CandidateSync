@@ -420,18 +420,6 @@
 .filter-select-wrap {
   position: relative;
 }
-.filter-select-wrap svg {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 11px;
-  transform: translateY(-50%);
-  color: #8d92a4;
-  pointer-events: none;
-}
-.filter-select-wrap select {
-  padding-left: 34px;
-}
 .candidate-list {
   display: grid;
   gap: 12px;
