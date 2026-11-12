@@ -12,6 +12,7 @@ const BrandLogo = ({ size = "normal", showText = true }) => {
           fill="none"
         >
           <rect x="4" y="4" width="36" height="36" rx="12" fill="currentColor" opacity=".1" />
+          <circle cx="22" cy="22" r="19" stroke="currentColor" strokeWidth="2" />
           <path
             d="M13 22.5 19 28l12-13"
             stroke="currentColor"
@@ -19,7 +20,6 @@ const BrandLogo = ({ size = "normal", showText = true }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          <circle cx="22" cy="22" r="19" stroke="currentColor" strokeWidth="2" />
         </svg>
       </div>
 
