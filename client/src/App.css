@@ -1076,6 +1076,23 @@
 .login-brand {
   min-height: 48px;
 }
+
+.login-brand .brand-logo {
+  color: #1e3154;
+}
+
+.login-brand .brand-logo-icon circle {
+  fill: #1e3154;
+  stroke: #1e3154;
+}
+
+.login-brand .brand-logo-icon path {
+  stroke: #fff;
+}
+
+.login-brand .brand-wordmark span {
+  color: #1e3154;
+}
 .login-form-wrapper {
   width: 100%;
   max-width: 420px;
