@@ -816,29 +816,8 @@
   margin-top: 26px;
 }
 
-.progress-track {
-  position: absolute;
-  top: 17px;
-  left: 10%;
-  right: 10%;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #e6e7ef;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.progress-track span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--brand);
-  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 .progress-step {
+  --progress-marker-size: 34px;
   position: relative;
   z-index: 1;
   min-width: 0;
@@ -849,13 +828,44 @@
   text-align: center;
   font-size: 10px;
 }
+
+.progress-connector {
+  position: absolute;
+  top: calc(var(--progress-marker-size) / 2);
+  left: calc(50% + var(--progress-marker-size) / 2);
+  right: calc(-50% + var(--progress-marker-size) / 2);
+  z-index: 0;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e6e7ef;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.progress-connector-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-connector-filled {
+  transform: scaleX(1);
+}
 .progress-step > span {
   max-width: 100%;
   overflow-wrap: anywhere;
 }
 .progress-step-marker {
-  width: 34px;
-  height: 34px;
+  position: relative;
+  z-index: 2;
+  width: var(--progress-marker-size);
+  height: var(--progress-marker-size);
   display: grid;
   place-items: center;
   border: 1px solid #e4e5ed;
@@ -863,6 +873,10 @@
   color: #969bad;
   background: #fafaff;
   font-size: 11px;
+}
+.progress-step > span:last-child {
+  position: relative;
+  z-index: 2;
 }
 .progress-completed .progress-step-marker {
   color: #fff;
@@ -1566,9 +1580,12 @@
   .progress-step {
     font-size: 8px;
   }
+  .progress-step {
+    --progress-marker-size: 28px;
+  }
   .progress-step-marker {
-    width: 28px;
-    height: 28px;
+    width: var(--progress-marker-size);
+    height: var(--progress-marker-size);
   }
   .candidate-timeline-heading,
   .timeline-entry-top {
