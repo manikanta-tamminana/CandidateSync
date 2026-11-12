@@ -9,7 +9,6 @@ import {
   History,
   RefreshCw,
   Save,
-  SlidersHorizontal,
 } from "lucide-react";
 
 import { useAuth } from "../context/useAuth";
@@ -403,8 +402,6 @@ function AdminDashboard({ view = "overview" }) {
             </div>
 
             <div className="filter-select-wrap">
-              <SlidersHorizontal size={15} />
-
               <select
                 className="filter-select"
                 aria-label="Filter candidates by status"
