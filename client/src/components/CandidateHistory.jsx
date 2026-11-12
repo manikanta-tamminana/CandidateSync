@@ -30,7 +30,7 @@ function formatDate(date) {
 }
 
 const CandidateHistory = () => {
-  const { token, user } = useAuth();
+  const { token, user, updateUserStatus } = useAuth();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -44,7 +44,16 @@ const CandidateHistory = () => {
         setLoading(true);
         setError("");
         const data = await getMyHistory(token);
-        if (active) setHistory(data.history || []);
+        if (active) {
+          const fetchedHistory = data.history || [];
+          setHistory(fetchedHistory);
+
+          // Keep the signed-in profile in sync when status changes happened
+          // while the candidate was offline.
+          if (fetchedHistory.length > 0) {
+            updateUserStatus(fetchedHistory[0].newStatus);
+          }
+        }
       } catch (err) {
         if (active) setError(err.message || "Unable to load application history.");
       } finally {
@@ -54,11 +63,16 @@ const CandidateHistory = () => {
 
     if (token) fetchHistory();
     return () => { active = false; };
-  }, [token, refreshKey]);
+  }, [token, refreshKey, updateUserStatus]);
 
   const currentStatus = user?.currentStatus || "Applied";
-  const currentIndex = STATUS_ORDER.indexOf(currentStatus);
   const isRejected = currentStatus === "Rejected";
+  const progressStatus = isRejected
+    ? history[0]?.newStatus === "Rejected"
+      ? history[0].previousStatus
+      : "Applied"
+    : currentStatus;
+  const currentIndex = Math.max(0, STATUS_ORDER.indexOf(progressStatus));
 
   return (
     <section className="candidate-page">
@@ -112,7 +126,9 @@ const CandidateHistory = () => {
         </div>
         <div className="progress-steps">
           {STATUS_ORDER.map((step, index) => {
-            const completed = !isRejected && currentIndex >= index;
+            const completed = isRejected
+              ? currentIndex >= index
+              : currentIndex > index;
             const active = !isRejected && currentIndex === index;
             return (
               <div className={`progress-step ${completed ? "progress-completed" : ""} ${active ? "progress-active" : ""}`} key={step}>
